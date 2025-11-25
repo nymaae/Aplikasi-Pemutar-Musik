@@ -102,7 +102,7 @@ adrSong searchSongById(SongList L, int id) {
     return nullptr;
 }
 
-adrSong searchSongByTitle(SongList L, char title[]) {
+adrSong searchSongByTitle(SongList L, string title) {
     adrSong p = L.first;
     while (p != nullptr) {
         if (strcmpi(p->info.title, title) == 0) {
