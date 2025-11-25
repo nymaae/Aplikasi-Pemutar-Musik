@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1760795406 source:c:\users\asus\onedrive - telkom university\documents\semester 3\std\tp6\dll\dll.cpp
+	<iostream>
+	"DLL.h"
+
+1760795242 c:\users\asus\onedrive - telkom university\documents\semester 3\std\tp6\dll\dll.h
+
+1760795999 source:c:\users\asus\onedrive - telkom university\documents\semester 3\std\tp6\dll\main.cpp
+	<iostream>
+	"DLL.h"
+
