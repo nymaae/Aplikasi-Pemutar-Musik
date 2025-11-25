@@ -138,7 +138,7 @@ void createPlaylistList(PlaylistList &PL) {
     PL.first = nullptr;
 }
 
-adrPlaylist allocatePlaylist(char name[]) {
+adrPlaylist allocatePlaylist(string name) {
     adrPlaylist p = new PlaylistNode;
     if (p != nullptr) {
         strcpy(p->name, name);
