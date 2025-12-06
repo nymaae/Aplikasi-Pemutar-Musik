@@ -1,7 +1,7 @@
 #include <iostream>
 #include "spotify.h"
-#include "dashboardAdmin.cpp"
-#include "dashboardUser.cpp"
+#include "ADMIN.cpp"
+#include "USER.cpp"
 
 using namespace std;
 
@@ -43,11 +43,14 @@ int main() {
         tampilanDepanAdmin();
         cin >> choice2; 
         if choice2 == 'A' || choice2 == 'a' {
-            //fungsi tambah/hapus
+            // Fungsi tambah/hapus lagu
+            AdminChoices2A();
         } else if (choice2 == 'B' || choice2 == 'b') {
             //fungsi edit data lagu
+            AdminChoices2B();
         } else if (choice2 == 'C' || choice2 == 'c') {
             //fungsi tampilkan data semua lagu saat ini
+            AdminChoices2C();
         } else if (choice2 == 'X' || choice2 == 'x') {
             cout << "Terima kasih telah menggunakan Spoti-Lite!\n";
             return 0;

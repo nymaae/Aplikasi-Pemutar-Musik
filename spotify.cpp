@@ -59,7 +59,7 @@ void insertSongLast(SongList &L, adrSong p) {
 adrSong searchSongById(SongList L, int id) {
     adrSong p = L.first;
     while (p != nullptr) {
-        if (p->info.id == id) return p;
+        if (p->info.idSong == id) return p;
         p = p->next;
     }
     return nullptr;
@@ -87,7 +87,7 @@ void printSongList(SongList L) {
     cout << "\n--- Song Library ---\n";
     adrSong p = L.first;
     while (p != nullptr) {
-        cout << p->info.id << " | "
+        cout << p->info.idSong << " | "
              << p->info.title << " | "
              << p->info.artist << " | "
              << p->info.genre << endl;
@@ -102,13 +102,13 @@ void deleteSongById(SongList &L, int id, adrSong &p, PlaylistList &PL, PlayQueue
     cleanupSongReferences(PL, p);
     removeSongFromQueue(Q, p);
 
-    if (p->prev == nullptr && p->next == nullptr) {
+    if (p == L.first && p == L.last) {
         L.first = nullptr;
         L.last = nullptr;
-    } else if (p->prev == nullptr) {
+    } else if (p == L.first) {
         L.first = p->next;
         L.first->prev = nullptr;
-    } else if (p->next == nullptr) {
+    } else if (p == L.last) {
         L.last = p->prev;
         L.last->next = nullptr;
     } else {
@@ -174,6 +174,7 @@ void deletePlaylistByName(PlaylistList &PL, string name, adrPlaylist &p) {
     }
 
     delete p;
+    p = nullptr;
 }
 
 adrPlaylist searchPlaylistByName(PlaylistList PL, string name) {
@@ -187,6 +188,12 @@ adrPlaylist searchPlaylistByName(PlaylistList PL, string name) {
 
 void addSongToPlaylist(adrPlaylist P, adrSong S) {
     if (P == nullptr || S == nullptr) return;
+
+    adrRelation check = P->firstSong;
+    while (check != nullptr) {
+        if (check->song == S) return;
+        check = check->next;
+    }
 
     adrRelation newRel = new RelationNode;
     newRel->song = S;
@@ -207,7 +214,7 @@ void removeSongFromPlaylist(adrPlaylist P, int songId) {
     adrRelation current = P->firstSong;
     adrRelation prev = nullptr;
 
-    while (current != nullptr && current->song->info.id != songId) {
+    while (current != nullptr && current->song->info.idSong != songId) {
         prev = current;
         current = current->next;
     }
@@ -229,19 +236,18 @@ void printSongsInPlaylist(adrPlaylist P) {
         return;
     }
 
-    cout << "\n--- Songs in Playlist: " << P->name << " ---\n";
+    cout << "\n--- Playlist: " << P->name << " ---\n";
 
     if (P->firstSong == nullptr) {
-        cout << "This playlist is empty.\n";
+        cout << "(Empty Playlist)\n";
         return;
     }
 
     adrRelation r = P->firstSong;
     while (r != nullptr) {
-        cout << r->song->info.id << " | "
-             << r->song->info.title << " | "
-             << r->song->info.artist << " | "
-             << r->song->info.genre << endl;
+        cout << r->song->info.idSong << " - " 
+             << r->song->info.title << " (" 
+             << r->song->info.artist << ")" << endl;
         r = r->next;
     }
 }
