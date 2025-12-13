@@ -1,24 +1,30 @@
-#ifndef SPOTIFY_H_INCLUDED
-#define SPOTIFY_H_INCLUDED
+#ifndef TUBES_H_INCLUDED
+#define TUBES_H_INCLUDED
 
 #include <iostream>
 #include <string>
-#include <stack>
+
+using namespace std;
+
+// --- STRUKTUR DATA ---
 
 struct Record {
-    std::string idSong;
-    std::string title;
-    std::string artist;
-    std::string genre;
+    string idSong;
+    string title;
+    string artist;
+    string genre;
+    string durasi;
+    int playCount;
 };
-
 typedef Record Song;
 
 typedef struct SongNode *adrSong;
 typedef struct RelationNode *adrRelation;
 typedef struct PlaylistNode *adrPlaylist;
 typedef struct QueueNode *adrQueue;
+typedef struct ElmHistory *adrHistory;
 
+// 1. LIST LAGU (Doubly Linked List)
 struct SongNode {
     Song info;
     adrSong next;
@@ -30,13 +36,15 @@ struct SongList {
     adrSong last;
 };
 
+// 2. RELASI PLAYLIST (Single Linked List)
 struct RelationNode {
     adrSong song;
     adrRelation next;
 };
 
+// 3. LIST PLAYLIST (Single Linked List)
 struct PlaylistNode {
-    std::string name;
+    string name;
     adrRelation firstSong;
     adrPlaylist next;
 };
@@ -45,56 +53,64 @@ struct PlaylistList {
     adrPlaylist first;
 };
 
-struct QueueNode {
-    adrSong song;
-    adrQueue next;
+struct PlayerState {
+    adrSong currentSong;
+    adrPlaylist currentPlaylist;
+    bool isPlaying;
 };
 
-struct PlayQueue {
-    adrQueue head;
-    adrQueue tail;
+struct ElmHistory {
+    adrSong info;
+    adrHistory next;
 };
 
-// Song list functions
+struct StackHistory {
+    adrHistory top;
+};
+
+// --- PRIMITIF (OPERASI DASAR) ---
+
+// Lagu
 void createSongList(SongList &L);
 adrSong allocateSong(Song x);
 void insertSongLast(SongList &L, adrSong p);
-void deleteSongById(SongList &L, const std::string &id, adrSong &p, PlaylistList &PL, PlayQueue &Q);
-adrSong searchSongById(SongList L, const std::string &id);
-adrSong searchSongByTitle(SongList L, const std::string &title);
-void updateSongData(adrSong p, Song newData);
+void deleteSongPrimitif(SongList &L, adrSong p);
+adrSong searchSongById(SongList L, string id);
+adrSong searchSongByTitle(SongList L, string title);
 void printSongList(SongList L);
-void printSongInfo(adrSong s);
 
-// Playlist functions 
+// Playlist
 void createPlaylistList(PlaylistList &PL);
-adrPlaylist allocatePlaylist(const std::string &name);
+adrPlaylist allocatePlaylist(string name);
 void insertPlaylistLast(PlaylistList &PL, adrPlaylist p);
-void deletePlaylistByName(PlaylistList &PL, const std::string &name, adrPlaylist &p);
-adrPlaylist searchPlaylistByName(PlaylistList PL, const std::string &name);
+adrPlaylist searchPlaylistByName(PlaylistList PL, string name);
 
-void addSongToPlaylist(adrPlaylist P, adrSong S);
-void removeSongFromPlaylist(adrPlaylist P, const std::string &songId);
+// Relasi Playlist
+adrRelation allocateRelation(adrSong s);
+void insertRelationLast(adrPlaylist P, adrRelation r);
+void deleteRelation(adrPlaylist P, adrSong s);
 void printSongsInPlaylist(adrPlaylist P);
-void cleanupSongReferences(PlaylistList &PL, adrSong deletedSong);
 
-// Queue functions
-void removeSongFromQueue(PlayQueue &Q, adrSong songToRemove);
+void createStack(StackHistory &S);
+void pushStack(StackHistory &S, adrSong pLagu);
+void printStack(StackHistory S);
 
-// Playback & history (prototypes)
-extern adrSong currentSong;
-extern adrPlaylist currentPlaylist;
-extern bool isPlaying;
-extern std::stack<adrSong> historyStack;
+// --- FITUR LOGIKA ---
 
-void pushHistory(adrSong s);
-void printHistory();
+void deleteSongComplete(SongList &L, PlaylistList &PL, PlayerState &PS, string id);
+void playSong(PlayerState &PS, StackHistory &H, adrSong s, adrPlaylist context);
+void pauseSong(PlayerState &PS);
+void playNext(PlayerState &PS, StackHistory &H, SongList L);
+void playPrev(PlayerState &PS, StackHistory &H, SongList L);
+string ketPlayStop(PlayerState PS);
+adrSong findSimilarSong(SongList L, adrSong current);
 
-void playSong(adrSong s, adrPlaylist p);
-void pauseSong();
-void resumeSong();
-void playNext();
-void playPrev();
-adrRelation findRelationNode(adrPlaylist p, adrSong s);
+int countTotalSongs(SongList L);
+int countTotalPlaylists(PlaylistList PL);
+int countUniqueArtists(SongList L);
+int countUniqueGenres(SongList L);
 
-#endif // SPOTIFY_H_INCLUDED
+void printTopSong(SongList L);
+void printSingers(SongList L);
+
+#endif // TUBES_H_INCLUDED
