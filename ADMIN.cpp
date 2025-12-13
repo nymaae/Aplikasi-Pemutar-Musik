@@ -1,18 +1,24 @@
-#include <iostream>
-#include <string>
 #include "spotify.h"
+#include <iostream>
+
 using namespace std;
 
-void tampilanDepanAdmin() {
+void tampilanDepanAdmin(SongList L, PlaylistList PL) {
     cout << "------------------------------------------------------------\n";
-    cout << "                 ★  SPOTI-LITE DASHBOARD FOR ADMIN  ★\n";
+    cout << "                 SPOTI-LITE DASHBOARD FOR ADMIN  \n";
     cout << "------------------------------------------------------------\n\n";
 
-    cout << "Mini Recap\n";
-    cout << "• Jumlah Artis  : 3\n";
-    cout << "• Jumlah Album  : 5\n";
-    cout << "• Jumlah Lagu   : 44\n";
-    cout << "• Jumlah User   : 2\n\n";
+    int totalLagu = countTotalSongs(L);
+    int totalPlaylist = countTotalPlaylists(PL);
+    int totalArtis = countUniqueArtists(L);
+    int totalGenre = countUniqueGenres(L);
+
+    cout << "Mini Recap Data\n";
+    cout << "Jumlah Lagu     : " << totalLagu << "\n";
+    cout << "Jumlah Artis    : " << totalArtis << "\n";
+    cout << "Jumlah Genre    : " << totalGenre << "\n";
+    cout << "Jumlah Playlist : " << totalPlaylist << "\n";
+    cout << "\n";
 
     cout << "---------------Menu--------------- \n";
     cout << "[A] Tambah/Hapus \n";
@@ -23,17 +29,7 @@ void tampilanDepanAdmin() {
     cout << "Pilih: \n";
 }
 
-
-
-/*   cout << "PLAYLIST (Doubly Linked List)\n";
-    for (int i = 0; i < jumlah; i++) {
-        if (i == indexLagu)
-            cout << "-> " << playlist[i] << endl;   // lagu yg sedang diputar
-        else
-            cout << "   " << playlist[i] << endl;
-    }*/
-    
-void AdminChoices2A(){
+void AdminChoices2A(SongList &daftarLagu, PlaylistList &daftarPlaylist, PlayerState &PS){
     cout << "Fitur Tambah/Hapus Lagu\n";
     cout << "[1] Tambah Lagu\n";
     cout << "[2] Hapus Lagu\n";
@@ -44,40 +40,46 @@ void AdminChoices2A(){
     if (subChoice == '1') {
         // Fitur Tambah Lagu
         Song data;
-        cout << "ID Lagu (angka): "; 
+        cout << "ID Lagu (angka): ";
         cin >> data.idSong;
-            
-        cout << "Judul (tanpa spasi): "; 
+
+        cout << "Judul (tanpa spasi): ";
         cin >> data.title;
-            
-        cout << "Artis (tanpa spasi): "; 
+
+        cout << "Artis (tanpa spasi): ";
         cin >> data.artist;
-            
-        cout << "Genre (tanpa spasi): "; 
+
+        cout << "Genre (tanpa spasi): ";
         cin >> data.genre;
+
+        cout << "Durasi (mm:ss): ";
+        cin >> data.durasi;
 
         insertSongLast(daftarLagu, allocateSong(data));
         cout << "Lagu berhasil disimpan!\n";
-        return main();
 
     } else if (subChoice == '2') {
         // Fitur Hapus Lagu
-        int idHapus;
+        if (daftarLagu.first == nullptr) {
+            cout << "\nLibrary lagu masih kosong. Tidak ada data untuk dihapus.\n";
+            return;
+        }
+
+        string idHapus;
         cout << "Masukkan ID Lagu yang mau dihapus: ";
         cin >> idHapus;
+        deleteSongComplete(daftarLagu, daftarPlaylist, PS, idHapus);
+        cout << ">> Proses selesai.\n";
 
-        adrSong p; // Variabel penampung
-        deleteSongById(daftarLagu, idHapus, p, daftarPlaylist, antrian);
-        cout << ">> Proses hapus selesai.\n";
     } else {
         cout << "Pilihan tidak valid.\n";
     }
 }
 
-void AdminChoices2B(){
-    cout << "Fitur Edit Data Lagu\n";
+void AdminChoices2B(SongList &daftarLagu){
+    cout << "Edit Data Lagu\n";
     cout << "Masukkan ID Lagu yang ingin diedit: ";
-    int idToEdit;
+    string idToEdit;
     cin >> idToEdit;
 
     adrSong songToEdit = searchSongById(daftarLagu, idToEdit);
@@ -92,35 +94,25 @@ void AdminChoices2B(){
     cout << "Artis: " << songToEdit->info.artist << "\n";
     cout << "Genre: " << songToEdit->info.genre << "\n";
 
-    cout << "Masukkan data baru (tekan enter untuk melewati):\n";
+    cout << "Masukkan data baru (tekan enter/ketik '-' untuk melewati):\n";
 
-    cout << "Judul Baru: ";
-    string newTitle;
-    if (!newTitle.empty()) {
-        songToEdit->info.title = newTitle;
-    }
+    string temp;
+    cout << "Judul Baru: "; cin >> temp;
+    if (temp != "-") songToEdit->info.title = temp;
 
-    cout << "Artis Baru: ";
-    string newArtist;
-    if (!newArtist.empty()) {
-        songToEdit->info.artist = newArtist;
-    }
+    cout << "Artis Baru: "; cin >> temp;
+    if (temp != "-") songToEdit->info.artist = temp;
 
-    cout << "Genre Baru: ";
-    string newGenre;
-    if (!newGenre.empty()) {
-        songToEdit->info.genre = newGenre;
-    }
+    cout << "Genre Baru: "; cin >> temp;
+    if (temp != "-") songToEdit->info.genre = temp;
+
+    cout << "Durasi Baru: "; cin >> temp;
+    if (temp != "-") songToEdit->info.durasi = temp;
 
     cout << "Data lagu berhasil diperbarui.\n";
-
 }
 
-void AdminChoices2C(){
-    cout << "Fitur Tampilkan Data Semua Lagu Saat Ini\n";
+void AdminChoices2C(SongList &daftarLagu){
+    cout << "Data Semua Lagu Saat Ini\n";
     printSongList(daftarLagu);
-    return main();
 }
-
-
-

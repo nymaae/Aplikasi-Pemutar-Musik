@@ -1,38 +1,6 @@
-#include <iostream>
-#include <string>
-#include <stack>
 #include "spotify.h"
 
-using namespace std;
-
-// SONG LIST FUNCTIONS
-void removeSongFromQueue(PlayQueue &Q, adrSong songToRemove) {
-    if (Q.head == nullptr) return;
-
-    adrQueue current = Q.head;
-    adrQueue prev = nullptr;
-
-    while (current != nullptr) {
-        if (current->song == songToRemove) {
-            adrQueue temp = current;
-            if (prev == nullptr) {
-                Q.head = current->next;
-                current = Q.head;
-            } else {
-                prev->next = current->next;
-                current = prev->next;
-            }
-            if (temp == Q.tail) {
-                Q.tail = prev;
-            }
-            delete temp;
-        } else {
-            prev = current;
-            current = current->next;
-        }
-    }
-}
-
+// ================= PRIMITIF LAGU =================
 void createSongList(SongList &L) {
     L.first = nullptr;
     L.last = nullptr;
@@ -40,11 +8,10 @@ void createSongList(SongList &L) {
 
 adrSong allocateSong(Song x) {
     adrSong p = new SongNode;
-    if (p != nullptr) {
-        p->info = x;
-        p->next = nullptr;
-        p->prev = nullptr;
-    }
+    p->info = x;
+    p->info.playCount = 0;
+    p->next = nullptr;
+    p->prev = nullptr;
     return p;
 }
 
@@ -59,63 +26,7 @@ void insertSongLast(SongList &L, adrSong p) {
     }
 }
 
-adrSong searchSongById(SongList L, const string &id) {
-    adrSong p = L.first;
-    while (p != nullptr) {
-        if (p->info.idSong == id) return p;
-        p = p->next;
-    }
-    return nullptr;
-}
-
-adrSong searchSongByTitle(SongList L, const string &title) {
-    adrSong p = L.first;
-    while (p != nullptr) {
-        if (p->info.title == title) return p;
-        p = p->next;
-    }
-    return nullptr;
-}
-
-void updateSongData(adrSong p, Song newData) {
-    if (p != nullptr) p->info = newData;
-}
-
-void printSongList(SongList L) {
-    if (L.first == nullptr) {
-        cout << "Song library is empty." << endl;
-        return;
-    }
-
-    cout << "\n--- Song Library ---\n";
-    adrSong p = L.first;
-    while (p != nullptr) {
-        cout << p->info.idSong << " | "
-             << p->info.title << " | "
-             << p->info.artist << " | "
-             << p->info.genre << endl;
-        p = p->next;
-    }
-}
-
-void printSongInfo(adrSong s) {
-    if (s == nullptr) {
-        cout << "(null song)\n";
-        return;
-    }
-    cout << "ID     : " << s->info.idSong << endl;
-    cout << "Title  : " << s->info.title << endl;
-    cout << "Artist : " << s->info.artist << endl;
-    cout << "Genre  : " << s->info.genre << endl;
-}
-
-void deleteSongById(SongList &L, string &id, adrSong &p, PlaylistList &PL, PlayQueue &Q) {
-    p = searchSongById(L, id);
-    if (p == nullptr) return;
-
-    cleanupSongReferences(PL, p);
-    removeSongFromQueue(Q, p);
-
+void deleteSongPrimitif(SongList &L, adrSong p) {
     if (p == L.first && p == L.last) {
         L.first = nullptr;
         L.last = nullptr;
@@ -129,50 +40,52 @@ void deleteSongById(SongList &L, string &id, adrSong &p, PlaylistList &PL, PlayQ
         p->prev->next = p->next;
         p->next->prev = p->prev;
     }
-
     delete p;
-    p = nullptr;
 }
 
-void cleanupSongReferences(PlaylistList &PL, adrSong deletedSong) {
-    adrPlaylist pList = PL.first;
+adrSong searchSongById(SongList L, string id) {
+    adrSong p = L.first;
+    while (p != nullptr) {
+        if (p->info.idSong == id) return p;
+        p = p->next;
+    }
+    return nullptr;
+}
 
-    while (pList != nullptr) {
-        adrRelation current = pList->firstSong;
-        adrRelation prev = nullptr;
+adrSong searchSongByTitle(SongList L, string title) {
+    adrSong p = L.first;
+    while (p != nullptr) {
+        if (p->info.title == title) return p;
+        p = p->next;
+    }
+    return nullptr;
+}
 
-        while (current != nullptr) {
-            if (current->song == deletedSong) {
-                adrRelation temp = current;
-                if (prev == nullptr) {
-                    pList->firstSong = current->next;
-                    current = pList->firstSong;
-                } else {
-                    prev->next = current->next;
-                    current = prev->next;
-                }
-                delete temp;
-            } else {
-                prev = current;
-                current = current->next;
-            }
-        }
-        pList = pList->next;
+void printSongList(SongList L) {
+    if (L.first == nullptr) {
+        cout << "(Data Lagu Kosong)\n";
+        return;
+    }
+    adrSong p = L.first;
+    while (p != nullptr) {
+        cout << "--------------------------------------------------\n";
+        cout << "ID: " << p->info.idSong << " | " << p->info.title << "\n";
+        cout << "      " << p->info.artist << " (" << p->info.genre << ") "
+             << "- [" << p->info.durasi << "]\n";
+        p = p->next;
     }
 }
 
-// PLAYLIST FUNCTIONS
+// ================= PRIMITIF PLAYLIST =================
 void createPlaylistList(PlaylistList &PL) {
     PL.first = nullptr;
 }
 
-adrPlaylist allocatePlaylist(const string &name) {
+adrPlaylist allocatePlaylist(string name) {
     adrPlaylist p = new PlaylistNode;
-    if (p != nullptr) {
-        p->name = name;
-        p->firstSong = nullptr;
-        p->next = nullptr;
-    }
+    p->name = name;
+    p->firstSong = nullptr;
+    p->next = nullptr;
     return p;
 }
 
@@ -186,40 +99,7 @@ void insertPlaylistLast(PlaylistList &PL, adrPlaylist p) {
     }
 }
 
-void deletePlaylistByName(PlaylistList &PL, const string &name, adrPlaylist &p) {
-    adrPlaylist current = PL.first;
-    adrPlaylist prev = nullptr;
-
-    while (current != nullptr && current->name != name) {
-        prev = current;
-        current = current->next;
-    }
-
-    if (current == nullptr) {
-        p = nullptr;
-        return;
-    }
-
-    p = current;
-
-    if (prev == nullptr) {
-        PL.first = current->next;
-    } else {
-        prev->next = current->next;
-    }
-
-    adrRelation rel = current->firstSong;
-    while (rel != nullptr) {
-        adrRelation temp = rel;
-        rel = rel->next;
-        delete temp;
-    }
-
-    delete p;
-    p = nullptr;
-}
-
-adrPlaylist searchPlaylistByName(PlaylistList PL, const string &name) {
+adrPlaylist searchPlaylistByName(PlaylistList PL, string name) {
     adrPlaylist p = PL.first;
     while (p != nullptr) {
         if (p->name == name) return p;
@@ -228,182 +108,267 @@ adrPlaylist searchPlaylistByName(PlaylistList PL, const string &name) {
     return nullptr;
 }
 
-void addSongToPlaylist(adrPlaylist P, adrSong S) {
-    if (P == nullptr || S == nullptr) return;
+adrRelation allocateRelation(adrSong s) {
+    adrRelation r = new RelationNode;
+    r->song = s;
+    r->next = nullptr;
+    return r;
+}
 
-    adrRelation check = P->firstSong;
-    while (check != nullptr) {
-        if (check->song == S) return;
-        check = check->next;
-    }
-
-    adrRelation newRel = new RelationNode;
-    newRel->song = S;
-    newRel->next = nullptr;
-
+void insertRelationLast(adrPlaylist P, adrRelation r) {
     if (P->firstSong == nullptr) {
-        P->firstSong = newRel;
+        P->firstSong = r;
     } else {
         adrRelation q = P->firstSong;
         while (q->next != nullptr) q = q->next;
-        q->next = newRel;
+        q->next = r;
     }
 }
 
-void removeSongFromPlaylist(adrPlaylist P, const string &songId) {
-    if (P == nullptr || P->firstSong == nullptr) return;
-
-    adrRelation current = P->firstSong;
+void deleteRelation(adrPlaylist P, adrSong s) {
+    adrRelation curr = P->firstSong;
     adrRelation prev = nullptr;
-
-    while (current != nullptr && current->song->info.idSong != songId) {
-        prev = current;
-        current = current->next;
+    while (curr != nullptr) {
+        if (curr->song == s) {
+            if (prev == nullptr) {
+                P->firstSong = curr->next;
+            } else {
+                prev->next = curr->next;
+            }
+            delete curr;
+            return;
+        }
+        prev = curr;
+        curr = curr->next;
     }
-
-    if (current == nullptr) return;
-
-    if (prev == nullptr) {
-        P->firstSong = current->next;
-    } else {
-        prev->next = current->next;
-    }
-
-    delete current;
 }
 
 void printSongsInPlaylist(adrPlaylist P) {
-    if (P == nullptr) {
-        cout << "Playlist does not exist.\n";
-        return;
-    }
-
-    cout << "\n--- Playlist: " << P->name << " ---\n";
-
     if (P->firstSong == nullptr) {
-        cout << "(Empty Playlist)\n";
+        cout << "(Playlist Kosong)\n";
         return;
     }
-
     adrRelation r = P->firstSong;
     while (r != nullptr) {
-        cout << r->song->info.idSong << " - "
-             << r->song->info.title << " ("
-             << r->song->info.artist << ")" << endl;
+        cout << "-> " << r->song->info.title << " (" << r->song->info.artist << ")\n";
         r = r->next;
     }
 }
 
-// Globals 
-adrSong currentSong = nullptr;
-adrPlaylist currentPlaylist = nullptr;
-bool isPlaying = false;
-stack<adrSong> historyStack;
+//==================PRIMITIF STACK==================
 
-void pushHistory(adrSong s) {
-    if (s != nullptr) {
-        historyStack.push(s);
+void createStack(StackHistory &S) {
+    S.top = nullptr;
+}
+
+void pushStack(StackHistory &S, adrSong pLagu) {
+    adrHistory p = new ElmHistory;
+    p->info = pLagu;
+    p->next = nullptr;
+
+    // Insert First
+    if (S.top == nullptr) {
+        S.top = p;
+    } else {
+        p->next = S.top;
+        S.top = p;
     }
 }
 
-void printHistory() {
-    cout << "\n--- PLAY HISTORY (Most Recent First) ---\n";
+void printStack(StackHistory S) {
+    if (S.top == nullptr) {
+        cout << "(History Kosong)\n";
+        return;
+    }
 
-    if (historyStack.empty()) {
-        cout << "No songs have been played yet.\n";
-    } else {
-        stack<adrSong> tempStack = historyStack;
-        int i = 1;
-        while (!tempStack.empty()) {
-            adrSong song = tempStack.top();
-            cout << i++ << ". " << song->info.title
-                 << " by " << song->info.artist << endl;
-            tempStack.pop();
+    adrHistory p = S.top;
+    int i = 1;
+    while (p != nullptr) {
+        cout << i << ". " << p->info->info.title
+             << " - " << p->info->info.artist << endl;
+        p = p->next;
+        i++;
+    }
+}
+
+// ================= LOGIKA FITUR =================
+
+void deleteSongComplete(SongList &L, PlaylistList &PL, PlayerState &PS, string id) {
+    adrSong p = searchSongById(L, id);
+    if (p == nullptr) return;
+
+    // Stop jika sedang main
+    if (PS.currentSong == p) {
+        PS.isPlaying = false;
+        PS.currentSong = nullptr;
+        PS.currentPlaylist = nullptr;
+    }
+
+    // Hapus dari semua playlist
+    adrPlaylist currP = PL.first;
+    while (currP != nullptr) {
+        deleteRelation(currP, p);
+        currP = currP->next;
+    }
+
+    // Hapus dari library
+    deleteSongPrimitif(L, p);
+}
+
+void playSong(PlayerState &PS, StackHistory &H, adrSong s, adrPlaylist context) {
+    if (s != nullptr) {
+        PS.currentSong = s;
+        PS.currentPlaylist = context;
+        PS.isPlaying = true;
+        s->info.playCount++;
+        pushStack(H, s);
+    }
+}
+
+void pauseSong(PlayerState &PS) {
+    if (PS.currentSong != nullptr) {
+        if (PS.isPlaying) PS.isPlaying = false;
+        else PS.isPlaying = true;
+    }
+}
+
+adrSong findSimilarSong(SongList L, adrSong current) {
+    if (current == nullptr) return L.first;
+
+    // 1. Cari Artis Sama
+    adrSong p = L.first;
+    while (p != nullptr) {
+        if (p != current && p->info.artist == current->info.artist) return p;
+        p = p->next;
+    }
+    // 2. Cari Genre Sama
+    p = L.first;
+    while (p != nullptr) {
+        if (p != current && p->info.genre == current->info.genre) return p;
+        p = p->next;
+    }
+
+    if (current->next != nullptr) return current->next;
+    return L.first;
+}
+
+void playNext(PlayerState &PS, StackHistory &H, SongList L) {
+    if (PS.currentSong == nullptr) return;
+
+    adrSong nextSong = nullptr;
+
+    if (PS.currentPlaylist != nullptr) {
+        adrRelation r = PS.currentPlaylist->firstSong;
+        while (r != nullptr) {
+            if (r->song == PS.currentSong) {
+                if (r->next != nullptr) nextSong = r->next->song;
+                else if (PS.currentPlaylist->firstSong != nullptr)
+                    nextSong = PS.currentPlaylist->firstSong->song;
+                break;
+            }
+            r = r->next;
         }
-    }
-
-    cout << "----------------------------------------\n";
-}
-
-void playSong(adrSong s, adrPlaylist p) {
-    if (s != nullptr) {
-        currentSong = s;
-        currentPlaylist = p;
-        isPlaying = true;
-
-        pushHistory(s);
-
-        cout << "\n[INFO] Now playing: " << s->info.title
-             << " by " << s->info.artist << endl;
     } else {
-        cout << "\n[ERROR] Cannot play. Song is invalid.\n";
+        nextSong = findSimilarSong(L, PS.currentSong);
+    }
+
+    if (nextSong != nullptr) {
+        playSong(PS, H, nextSong, PS.currentPlaylist);
     }
 }
 
-void pauseSong() {
-    if (currentSong != nullptr && isPlaying) {
-        isPlaying = false;
-        cout << "\n[INFO] Song paused.\n";
+void playPrev(PlayerState &PS, StackHistory &H, SongList L) {
+    if (PS.currentSong == nullptr) return;
+
+    adrSong prevSong = nullptr;
+
+    if (PS.currentPlaylist != nullptr) {
+        adrRelation r = PS.currentPlaylist->firstSong;
+        adrRelation prev = nullptr;
+        while (r != nullptr) {
+            if (r->song == PS.currentSong) break;
+            prev = r;
+            r = r->next;
+        }
+        if (prev != nullptr) prevSong = prev->song;
     } else {
-        cout << "\n[INFO] Nothing is currently playing.\n";
+        if (PS.currentSong->prev != nullptr) prevSong = PS.currentSong->prev;
+    }
+
+    if (prevSong != nullptr) {
+        playSong(PS, H, prevSong, PS.currentPlaylist);
     }
 }
 
-void resumeSong() {
-    if (currentSong != nullptr && !isPlaying) {
-        isPlaying = true;
-        cout << "\n[INFO] Song resumed.\n";
-    } else {
-        cout << "\n[INFO] The song is already playing or none loaded.\n";
+
+int countUniqueArtists(SongList L) {
+    if (L.first == nullptr) return 0;
+
+    int count = 0;
+    adrSong p = L.first;
+
+    while (p != nullptr) {
+        // Cek ke belakang (dari first sampai sebelum p)
+        bool isDuplicate = false;
+        adrSong checker = L.first;
+        while (checker != p) {
+            if (checker->info.artist == p->info.artist) {
+                isDuplicate = true;
+                break;
+            }
+            checker = checker->next;
+        }
+
+        if (!isDuplicate) {
+            count++;
+        }
+        p = p->next;
     }
+    return count;
 }
 
-adrRelation findRelationNode(adrPlaylist p, adrSong s) {
-    if (p == nullptr || s == nullptr) {
-        return nullptr;
-    }
+int countUniqueGenres(SongList L) {
+    if (L.first == nullptr) return 0;
 
-    adrRelation R = p->firstSong;
+    int count = 0;
+    adrSong p = L.first;
 
-    while (R != nullptr) {
-        if (R->song == s) return R;
-        R = R->next;
+    while (p != nullptr) {
+        // Cek ke belakang
+        bool isDuplicate = false;
+        adrSong checker = L.first;
+        while (checker != p) {
+            if (checker->info.genre == p->info.genre) {
+                isDuplicate = true;
+                break;
+            }
+            checker = checker->next;
+        }
+
+        if (!isDuplicate) {
+            count++;
+        }
+        p = p->next;
     }
-    return nullptr;
+    return count;
 }
 
-void playNext() {
-    if (currentSong == nullptr || currentPlaylist == nullptr) {
-        cout << "\n[INFO] No playlist is active.\n";
-        return;
+int countTotalSongs(SongList L) {
+    int jumlah = 0;
+    adrSong p = L.first;
+    while (p != nullptr) {
+        jumlah++;
+        p = p->next;
     }
-
-    adrRelation R = findRelationNode(currentPlaylist, currentSong);
-
-    if (R != nullptr && R->next != nullptr) {
-        playSong(R->next->song, currentPlaylist);
-    } else {
-        cout << "\n[INFO] End of playlist reached.\n";
-    }
+    return jumlah;
 }
 
-void playPrev() {
-    if (currentSong == nullptr || currentPlaylist == nullptr) {
-        cout << "\n[INFO] No playlist is active.\n";
-        return;
+int countTotalPlaylists(PlaylistList PL) {
+    int jumlah = 0;
+    adrPlaylist p = PL.first;
+    while (p != nullptr) {
+        jumlah++;
+        p = p->next;
     }
-
-    adrRelation current = currentPlaylist->firstSong;
-    adrRelation prev = nullptr;
-
-    while (current != nullptr && current->song != currentSong) {
-        prev = current;
-        current = current->next;
-    }
-
-    if (prev != nullptr) {
-        playSong(prev->song, currentPlaylist);
-    } else {
-        cout << "\n[INFO] Start of playlist reached.\n";
-    }
+    return jumlah;
 }
