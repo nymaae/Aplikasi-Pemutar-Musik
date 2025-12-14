@@ -18,50 +18,50 @@ void loadDummyData(SongList &L, PlaylistList &PL) {
     cout << ">> [LOADING] Memuat Data Dummy 4 Artis & Playlist...\n";
 
     // ==========================================================
-    // ARTIS 1: TULUS (Genre: IndoPop)
+    // ARTIS 1: TULUS (Genre: Pop & Ballad)
     // Album 1: Monokrom (4 Lagu)
     // ==========================================================
-    insertSongLast(L, allocateSong({"101", "ManusiaKuat", "Tulus", "IndoPop", "03:05", 0}));
-    insertSongLast(L, allocateSong({"102", "Pamit", "Tulus", "IndoPop", "03:53", 0}));
-    insertSongLast(L, allocateSong({"103", "RuangSendiri", "Tulus", "IndoPop", "04:29", 0}));
-    insertSongLast(L, allocateSong({"104", "Monokrom", "Tulus", "IndoPop", "03:34", 0}));
+    insertSongLast(L, allocateSong({"101", "ManusiaKuat", "Tulus", "Klasik", "03:05", 0}));
+    insertSongLast(L, allocateSong({"102", "Pamit", "Tulus", "Ballad", "03:53", 0}));
+    insertSongLast(L, allocateSong({"103", "RuangSendiri", "Tulus", "Klasik", "04:29", 0}));
+    insertSongLast(L, allocateSong({"104", "Monokrom", "Tulus", "Ballad", "03:34", 0}));
 
     // Album 2: Manusia (4 Lagu)
-    insertSongLast(L, allocateSong({"105", "HatiHatiDiJalan", "Tulus", "IndoPop", "04:02", 0}));
-    insertSongLast(L, allocateSong({"106", "Diri", "Tulus", "IndoPop", "03:42", 0}));
-    insertSongLast(L, allocateSong({"107", "Interaksi", "Tulus", "IndoPop", "02:50", 0}));
-    insertSongLast(L, allocateSong({"108", "JatuhSuka", "Tulus", "IndoPop", "03:15", 0}));
+    insertSongLast(L, allocateSong({"105", "HatiHatiDiJalan", "Tulus", "Ballad", "04:02", 0}));
+    insertSongLast(L, allocateSong({"106", "Diri", "Tulus", "Pop", "03:42", 0}));
+    insertSongLast(L, allocateSong({"107", "Interaksi", "Tulus", "Jazz", "02:50", 0}));
+    insertSongLast(L, allocateSong({"108", "JatuhSuka", "Tulus", "Pop", "03:15", 0}));
 
 
     // ==========================================================
-    // ARTIS 2: COLDPLAY (Genre: Alternative)
+    // ARTIS 2: COLDPLAY (Genre: Rock & Ballad)
     // Album 1: Parachutes (5 Lagu)
     // ==========================================================
-    insertSongLast(L, allocateSong({"201", "Yellow", "Coldplay", "Alternative", "04:26", 0}));
-    insertSongLast(L, allocateSong({"202", "Shiver", "Coldplay", "Alternative", "04:59", 0}));
-    insertSongLast(L, allocateSong({"203", "Sparks", "Coldplay", "Alternative", "03:47", 0}));
-    insertSongLast(L, allocateSong({"204", "Trouble", "Coldplay", "Alternative", "04:30", 0}));
-    insertSongLast(L, allocateSong({"205", "DontPanic", "Coldplay", "Alternative", "02:17", 0}));
+    insertSongLast(L, allocateSong({"201", "Yellow", "Coldplay", "Rock", "04:26", 0}));
+    insertSongLast(L, allocateSong({"202", "Shiver", "Coldplay", "Metal", "04:59", 0}));
+    insertSongLast(L, allocateSong({"203", "Sparks", "Coldplay", "Ballad", "03:47", 0})); 
+    insertSongLast(L, allocateSong({"204", "Trouble", "Coldplay", "Ballad", "04:30", 0}));
+    insertSongLast(L, allocateSong({"205", "DontPanic", "Coldplay", "Rock", "02:17", 0}));
 
 
     // ==========================================================
-    // ARTIS 3: NEWJEANS (Genre: KPop)
+    // ARTIS 3: NEWJEANS (Genre: Pop & RnB)
     // Album 1: Get Up (4 Lagu)
     // ==========================================================
-    insertSongLast(L, allocateSong({"301", "SuperShy", "NewJeans", "KPop", "02:34", 0}));
-    insertSongLast(L, allocateSong({"302", "ETA", "NewJeans", "KPop", "02:31", 0}));
-    insertSongLast(L, allocateSong({"303", "CoolWithYou", "NewJeans", "KPop", "02:27", 0}));
-    insertSongLast(L, allocateSong({"304", "GetUp", "NewJeans", "KPop", "00:36", 0}));
+    insertSongLast(L, allocateSong({"301", "SuperShy", "NewJeans", "HipHop", "02:34", 0}));
+    insertSongLast(L, allocateSong({"302", "ETA", "NewJeans", "Pop", "02:31", 0}));
+    insertSongLast(L, allocateSong({"303", "CoolWithYou", "NewJeans", "RnB", "02:27", 0}));
+    insertSongLast(L, allocateSong({"304", "GetUp", "NewJeans", "RnB", "00:36", 0}));
 
 
     // ==========================================================
-    // ARTIS 4: SHEILA ON 7 (Genre: PopRock)
+    // ARTIS 4: SHEILA ON 7 (Genre: Pop & Rock)
     // Album 1: Kisah Klasik (4 Lagu)
     // ==========================================================
-    insertSongLast(L, allocateSong({"401", "SahabatSejati", "SheilaOn7", "PopRock", "04:16", 0}));
-    insertSongLast(L, allocateSong({"402", "KisahKlasik", "SheilaOn7", "PopRock", "03:54", 0}));
-    insertSongLast(L, allocateSong({"403", "PriaKesepian", "SheilaOn7", "PopRock", "04:02", 0}));
-    insertSongLast(L, allocateSong({"404", "Sephia", "SheilaOn7", "PopRock", "04:52", 0}));
+    insertSongLast(L, allocateSong({"401", "SahabatSejati", "SheilaOn7", "Pop", "04:16", 0}));
+    insertSongLast(L, allocateSong({"402", "KisahKlasik", "SheilaOn7", "Jazz", "03:54", 0}));
+    insertSongLast(L, allocateSong({"403", "PriaKesepian", "SheilaOn7", "Rock", "04:02", 0})); 
+    insertSongLast(L, allocateSong({"404", "Sephia", "SheilaOn7", "Ballad", "04:52", 0}));
 
 
     // ==========================================================
