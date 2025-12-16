@@ -6,7 +6,6 @@
 using namespace std;
 
 int main() {
-
     int choice1, choice2, choice3;
 
     cout << "----------Selamat datang di Spoti-Lite!----------\n";
@@ -63,5 +62,4 @@ int main() {
         cout << "Pilihan tidak valid. Silahkan pilih kembali!\n";
         return main();
     } 
-
 }

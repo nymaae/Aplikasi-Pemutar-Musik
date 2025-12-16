@@ -23,8 +23,6 @@ void tampilanDepanAdmin() {
     cout << "Pilih: \n";
 }
 
-
-
 /*   cout << "PLAYLIST (Doubly Linked List)\n";
     for (int i = 0; i < jumlah; i++) {
         if (i == indexLagu)
@@ -121,6 +119,3 @@ void AdminChoices2C(){
     printSongList(daftarLagu);
     return main();
 }
-
-
-
