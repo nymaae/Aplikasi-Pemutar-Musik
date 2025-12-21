@@ -1,5 +1,5 @@
 # Aplikasi Pemutar Musik
-## [![Typing SVG](https://readme-typing-svg.demolab.com/?lines=Hello+gengs+!;Welcome+to+Aplikasi Pemutar Musik+🎧)](https://git.io/typing-svg)
+## [![Typing SVG](https://readme-typing-svg.demolab.com/?lines=Hello+gengs+!;Welcome+to+Aplikasi_Pemutar_Musik+🎧)](https://git.io/typing-svg)
 
 Sistem ini dirancang untuk menjadi aplikasi pemutar musik berbasis konsol (CLI) yang mampu menyimpan dan mengelola banyak lagu dari berbagai artis, genre, album, dan tahun rilis. Sistem mendukung dua peran pengguna, yaitu Admin sebagai pengelola data lagu dan User sebagai pengguna aplikasi pemutar musik.
 
