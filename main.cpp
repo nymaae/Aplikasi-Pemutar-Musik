@@ -3,17 +3,6 @@
 
 using namespace std;
 
-void tampilanDepanUser(SongList &songL, PlaylistList &playlistL, PlayerState &PS, StackHistory &H);
-void handlePlaylist(PlaylistList &playlistL, SongList &songL, PlayerState &PS, StackHistory &H);
-void SearchMenu(SongList &songL);
-
-// DEKLARASI FUNGSI DARI ADMIN.CPP
-void tampilanDepanAdmin(SongList L, PlaylistList PL);
-void AdminChoices2A(SongList &daftarLagu, PlaylistList &daftarPlaylist, PlayerState &PS);
-void AdminChoices2B(SongList &daftarLagu);
-void AdminChoices2C(SongList &daftarLagu);
-
-
 void loadDummyData(SongList &L, PlaylistList &PL) {
     cout << ">> [LOADING] Memuat Data Dummy 4 Artis & Playlist...\n";
 

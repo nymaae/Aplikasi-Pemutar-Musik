@@ -21,7 +21,6 @@ typedef Record Song;
 typedef struct SongNode *adrSong;
 typedef struct RelationNode *adrRelation;
 typedef struct PlaylistNode *adrPlaylist;
-typedef struct QueueNode *adrQueue;
 typedef struct ElmHistory *adrHistory;
 
 // 1. LIST LAGU (Doubly Linked List)
@@ -105,11 +104,20 @@ void playPrev(PlayerState &PS, StackHistory &H, SongList L);
 string ketPlayStop(PlayerState PS);
 adrSong findSimilarSong(SongList L, adrSong current);
 
+// DEKLARASI FUNGSI DARI ADMIN.CPP
+void tampilanDepanAdmin(SongList L, PlaylistList PL);
+void AdminChoices2A(SongList &daftarLagu, PlaylistList &daftarPlaylist, PlayerState &PS);
+void AdminChoices2B(SongList &daftarLagu);
+void AdminChoices2C(SongList &daftarLagu);
 int countTotalSongs(SongList L);
 int countTotalPlaylists(PlaylistList PL);
 int countUniqueArtists(SongList L);
 int countUniqueGenres(SongList L);
 
+// DEKLARASI FUNGSI DARI USER.CPP
+void SearchMenu(SongList &songL);
+void handlePlaylist(PlaylistList &playlistL, SongList &songL, PlayerState &PS, StackHistory &H);
+void tampilanDepanUser(SongList &songL, PlaylistList &playlistL, PlayerState &PS, StackHistory &H);
 void printTopSong(SongList L);
 void printSingers(SongList L);
 
