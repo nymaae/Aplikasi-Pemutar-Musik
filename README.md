@@ -1,5 +1,5 @@
 # Aplikasi Pemutar Musik
-## [![Typing SVG](https://readme-typing-svg.demolab.com/?lines=Hello+gengs+!;Welcome+to+Aplikasi_Pemutar_Musik+🎧)](https://git.io/typing-svg)
+## [![Typing SVG](https://readme-typing-svg.demolab.com/?lines=Hello+Guys+!;Welcome+to+Aplikasi_Pemutar_Musik+🎧)](https://git.io/typing-svg)
 
 Sistem ini dirancang untuk menjadi aplikasi pemutar musik berbasis konsol (CLI) yang mampu menyimpan dan mengelola banyak lagu dari berbagai artis, genre, album, dan tahun rilis. Sistem mendukung dua peran pengguna, yaitu Admin sebagai pengelola data lagu dan User sebagai pengguna aplikasi pemutar musik.
 
@@ -8,41 +8,53 @@ Sistem ini menggunakan tipe data bentukan (record) untuk merepresentasikan data 
 Seluruh proses pemutaran lagu pada sistem ini disimulasikan melalui perintah play / pause / next / previous yang ditampilkan dalam bentuk notifikasi pada console, tanpa memutar audio secara nyata.
 
 ## Fitur Utama
+### Role Admin
+#### 1. Manajemen Data Lagu
+- Tambah lagu
+- Edit data lagu
+- Hapus lagu
+- Tampilkan semua lagu
 
-### 1. **Manajemen Data Lagu (Admin)**
-- **Tambah Lagu**: Menambahkan lagu baru ke dalam library.
-- **Edit Lagu**: Mengubah data lagu yang sudah ada (judul, artis, genre, durasi).
-- **Hapus Lagu**: Menghapus lagu dari library.
-- **Tampilkan Semua Lagu**: Melihat seluruh data lagu yang tersimpan.
-- **Mini Recap Statistik**:
-  - Total lagu
-  - Total playlist
-  - Jumlah artis unik
-  - Jumlah genre unik
+> Perubahan data lagu oleh Admin akan otomatis memengaruhi data lagu pada playlist User karena playlist hanya menyimpan referensi lagu.
 
-> Perubahan data lagu oleh Admin akan otomatis memengaruhi data lagu pada playlist User.
+#### 2. Mini Recap Statistik
+Menampilkan ringkasan data sistem menggunakan fungsi:
+- `countTotalSongs`
+- `countTotalPlaylists`
+- `countUniqueArtists`
+- `countUniqueGenres`
 
-### 2. **Pemutaran Lagu (User)**
-- **Play / Pause Lagu**
-- **Next / Previous Lagu**
-- **Now Playing Detail**:
-  - Judul lagu
-  - Artis
-  - Durasi
-  - Sumber lagu (Library atau Playlist)
+### Role User
+#### 1. Pemutaran Lagu
+- Play / Pause
+- Next / Previous
+- Menampilkan detail *Now Playing* (judul, artis, durasi, sumber lagu)
 
-### 3. **Manajemen Playlist (User)**
-- Membuat playlist baru
+#### 2. Manajemen Playlist
+- Membuat playlist
 - Menambahkan lagu ke playlist
 - Menghapus lagu dari playlist
 - Melihat isi playlist
 - Memutar playlist
 
-### 4. **Pencarian Lagu**
-- Cari lagu berdasarkan **ID Lagu**
-- Cari lagu berdasarkan **Judul Lagu**
+#### 3. Riwayat Pemutaran Lagu
+- Menyimpan lagu yang telah diputar
+- Lagu terakhir diputar akan muncul paling atas
 
-### 5. **Fitur Tambahan**
+#### 4. Pencarian Lagu
+- Berdasarkan ID lagu
+- Berdasarkan judul lagu
+
+#### 5. Library User
+- Menampilkan seluruh lagu yang tersedia dalam aplikasi
+
+#### 6. Dashboard User
+Menampilkan:
+- Informasi lagu yang sedang diputar
+- Status pemutaran (play/pause)
+- Lagu terpopuler berdasarkan *play count* tertinggi
+
+## Fitur Tambahan
 - **Riwayat Pemutaran (History)**  
   Lagu yang terakhir diputar disimpan menggunakan struktur data **Stack**.
 - **Top Song**  
@@ -56,13 +68,17 @@ Seluruh proses pemutaran lagu pada sistem ini disimulasikan melalui perintah pla
   Lagu yang di-like otomatis masuk ke playlist **FAVORITE**.
 
 ## Struktur Data yang Digunakan
-- **Doubly Linked List** → Menyimpan data lagu (Library)
+- **Doubly Linked List** → Menyimpan data lagu sebagai library utama.
 - **Singly Linked List** → Menyimpan data playlist
-- **Singly Linked List (Relasi)** → Menghubungkan playlist dengan lagu
-- **Stack** → Menyimpan riwayat pemutaran lagu
-- **Struct & Pointer** → Mengelola status pemutar lagu (PlayerState)
+- **Stack (LIFO)** → Menyimpan riwayat pemutaran lagu
+- **Multi Linked List Tipe A** – Relasi Many to Many → Digunakan untuk menghubungkan data playlist dengan data lagu, dimana:
+   - Satu lagu dapat masuk ke banyak playlist
+   - Satu playlist dapat berisi banyak lagu
+   - Data lagu tidak diduplikasi, hanya direferensikan
+   - Seluruh struktur data diimplementasikan menggunakan **alokasi memori dinamis**.
 
-Seluruh struktur data diimplementasikan menggunakan **alokasi memori dinamis**.
+## Algoritma yang Digunakan
+- **Sequential Search** → Mencari data lagu berdasarkan ID lagu dan judul lagu dengan menelusuri node satu per satu pada Doubly Linked List
 
 ## Struktur Program
 
